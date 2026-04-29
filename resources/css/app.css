@@ -61,222 +61,270 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ============================================================
+   GLASSMORPHISM DESIGN SYSTEM
+   ============================================================
+
+   Core approach:
+   - Surfaces use semi-transparent white/dark with backdrop-filter blur
+   - Borders are translucent with a subtle inner highlight
+   - Shadows are soft, layered, and color-tinted
+   - Background should have rich gradients/imagery to "show through"
+
+   Usage in Tailwind: add these utility classes to elements:
+     .glass          — standard glass card
+     .glass-sm       — lighter blur, thinner card
+     .glass-strong   — heavy blur, more opaque
+     .glass-primary  — tinted with primary color
+     .glass-sidebar  — sidebar-specific glass
+   ============================================================ */
+
 :root {
+    /* --- Scene background (paint this on <body> or a wrapper) --- */
     --background:
-        oklch(0.9911 0 0);
+        oklch(0.9100 0.0200 160.00);
+
+    /* --- Text --- */
     --foreground:
-        oklch(0.2046 0 0);
+        oklch(0.1800 0.0100 166.00);
+
+    /* --- Glass surfaces (semi-transparent) --- */
     --card:
-        oklch(0.9911 0 0);
+        oklch(0.9800 0.0050 160.00 / 0.55);
     --card-foreground:
-        oklch(0.2046 0 0);
+        oklch(0.1800 0.0100 166.00);
+
     --popover:
-        oklch(0.9911 0 0);
+        oklch(0.9850 0.0030 160.00 / 0.75);
     --popover-foreground:
-        oklch(0.4386 0 0);
+        oklch(0.4000 0.0050 166.00);
+
+    /* --- Brand / Primary (kept from original, used for tinted glass) --- */
     --primary:
         oklch(0.8348 0.1302 160.9080);
     --primary-foreground:
         oklch(0.2626 0.0147 166.4589);
+
     --secondary:
-        oklch(0.9940 0 0);
+        oklch(0.9700 0.0050 160.00 / 0.45);
     --secondary-foreground:
-        oklch(0.2046 0 0);
+        oklch(0.1800 0.0100 166.00);
+
     --muted:
-        oklch(0.9461 0 0);
+        oklch(0.9300 0.0050 160.00 / 0.50);
     --muted-foreground:
-        oklch(0.2435 0 0);
+        oklch(0.3500 0.0050 166.00);
+
     --accent:
-        oklch(0.9461 0 0);
+        oklch(0.8348 0.1302 160.9080 / 0.18);
     --accent-foreground:
-        oklch(0.2435 0 0);
+        oklch(0.2435 0.0100 166.00);
+
     --destructive:
         oklch(0.5523 0.1927 32.7272);
     --destructive-foreground:
         oklch(0.9934 0.0032 17.2118);
+
+    /* --- Glass borders: translucent + subtle highlight --- */
     --border:
-        oklch(0.9037 0 0);
+        oklch(0.9600 0.0100 160.00 / 0.40);
     --input:
-        oklch(0.9731 0 0);
+        oklch(0.9800 0.0050 160.00 / 0.45);
     --ring:
-        oklch(0.8348 0.1302 160.9080);
-    --chart-1:
-        oklch(0.8348 0.1302 160.9080);
-    --chart-2:
-        oklch(0.6231 0.1880 259.8145);
-    --chart-3:
-        oklch(0.6056 0.2189 292.7172);
-    --chart-4:
-        oklch(0.7686 0.1647 70.0804);
-    --chart-5:
-        oklch(0.6959 0.1491 162.4796);
-    --radius:
-        0.5rem;
+        oklch(0.8348 0.1302 160.9080 / 0.60);
+
+    /* --- Charts --- */
+    --chart-1: oklch(0.8348 0.1302 160.9080);
+    --chart-2: oklch(0.6231 0.1880 259.8145);
+    --chart-3: oklch(0.6056 0.2189 292.7172);
+    --chart-4: oklch(0.7686 0.1647 70.0804);
+    --chart-5: oklch(0.6959 0.1491 162.4796);
+
+    --radius: 0.75rem;
+
+    /* --- Sidebar glass --- */
     --sidebar:
-        oklch(0.9911 0 0);
+        oklch(0.9800 0.0050 160.00 / 0.50);
     --sidebar-foreground:
-        oklch(0.5452 0 0);
+        oklch(0.4000 0.0050 166.00);
     --sidebar-primary:
         oklch(0.8348 0.1302 160.9080);
     --sidebar-primary-foreground:
         oklch(0.2626 0.0147 166.4589);
     --sidebar-accent:
-        oklch(0.9461 0 0);
+        oklch(0.8348 0.1302 160.9080 / 0.15);
     --sidebar-accent-foreground:
-        oklch(0.2435 0 0);
+        oklch(0.2435 0.0100 166.00);
     --sidebar-border:
-        oklch(0.9037 0 0);
+        oklch(0.9600 0.0100 160.00 / 0.35);
     --sidebar-ring:
-        oklch(0.8348 0.1302 160.9080);
-    --font-sans:
-        Outfit, sans-serif;
-    --font-serif:
-        ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-    --font-mono:
-        monospace;
-    --shadow-color:
-        #000000;
-    --shadow-opacity:
-        0.17;
-    --shadow-blur:
-        3px;
-    --shadow-spread:
-        0px;
-    --shadow-offset-x:
-        0px;
-    --shadow-offset-y:
-        1px;
-    --letter-spacing:
-        0.025em;
-    --spacing:
-        0.25rem;
-    --shadow-2xs:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.09);
-    --shadow-xs:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.09);
-    --shadow-sm:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
-    --shadow:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
-    --shadow-md:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 2px 4px -1px hsl(0 0% 0% / 0.17);
-    --shadow-lg:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 4px 6px -1px hsl(0 0% 0% / 0.17);
-    --shadow-xl:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 8px 10px -1px hsl(0 0% 0% / 0.17);
-    --shadow-2xl:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.43);
-    --tracking-normal:
-        0.025em;
+        oklch(0.8348 0.1302 160.9080 / 0.60);
+
+    /* --- Font --- */
+    --font-sans: Outfit, sans-serif;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: monospace;
+
+    /* --- Glass-specific tokens --- */
+    --glass-blur:          16px;
+    --glass-blur-sm:       8px;
+    --glass-blur-lg:       28px;
+    --glass-blur-xl:       40px;
+
+    --glass-bg-light:      oklch(0.9800 0.0030 160.00 / 0.55);
+    --glass-bg-tinted:     oklch(0.8800 0.0800 160.00 / 0.40);
+    --glass-border-light:  oklch(1.0000 0 0 / 0.55);
+    --glass-border-inner:  oklch(1.0000 0 0 / 0.80);
+    --glass-shadow:
+        0 4px 6px -1px oklch(0 0 0 / 0.06),
+        0 10px 30px -5px oklch(0 0 0 / 0.10),
+        0 0 0 1px oklch(0.9600 0.0100 160.00 / 0.40),
+        inset 0 1px 0 0 oklch(1.0000 0 0 / 0.70);
+    --glass-shadow-lg:
+        0 8px 12px -2px oklch(0 0 0 / 0.08),
+        0 20px 50px -8px oklch(0.4365 0.1044 156.00 / 0.14),
+        0 0 0 1px oklch(0.9600 0.0100 160.00 / 0.40),
+        inset 0 1px 0 0 oklch(1.0000 0 0 / 0.70);
+    --glass-shadow-primary:
+        0 8px 20px -4px oklch(0.8348 0.1302 160.9080 / 0.30),
+        0 0 0 1px oklch(0.8348 0.1302 160.9080 / 0.35),
+        inset 0 1px 0 0 oklch(1.0000 0 0 / 0.60);
+
+    /* --- Shadows --- */
+    --shadow-color: #000000;
+    --shadow-opacity: 0.10;
+    --shadow-blur: 20px;
+    --shadow-spread: 0px;
+    --shadow-offset-x: 0px;
+    --shadow-offset-y: 4px;
+    --letter-spacing: 0.025em;
+    --spacing: 0.25rem;
+
+    --shadow-2xs: 0px 1px 6px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs:  0px 2px 8px 0px hsl(0 0% 0% / 0.06);
+    --shadow-sm:  0px 2px 8px 0px hsl(0 0% 0% / 0.08), 0px 1px 2px -1px hsl(0 0% 0% / 0.06), inset 0 1px 0 0 hsl(0 0% 100% / 0.70);
+    --shadow:     0px 4px 16px 0px hsl(0 0% 0% / 0.08), 0px 2px 4px -1px hsl(0 0% 0% / 0.06), inset 0 1px 0 0 hsl(0 0% 100% / 0.65);
+    --shadow-md:  0px 6px 20px 0px hsl(0 0% 0% / 0.10), 0px 3px 6px -1px hsl(0 0% 0% / 0.07), inset 0 1px 0 0 hsl(0 0% 100% / 0.60);
+    --shadow-lg:  0px 10px 30px 0px hsl(0 0% 0% / 0.10), 0px 5px 10px -2px hsl(0 0% 0% / 0.07), inset 0 1px 0 0 hsl(0 0% 100% / 0.55);
+    --shadow-xl:  0px 16px 40px 0px hsl(0 0% 0% / 0.10), 0px 8px 16px -3px hsl(0 0% 0% / 0.07), inset 0 1px 0 0 hsl(0 0% 100% / 0.50);
+    --shadow-2xl: 0px 24px 60px 0px hsl(0 0% 0% / 0.15), inset 0 1px 0 0 hsl(0 0% 100% / 0.45);
+
+    --tracking-normal: 0.025em;
 }
 
+/* ============================================================
+   DARK MODE GLASS
+   ============================================================ */
 .dark {
     --background:
-        oklch(0.1822 0 0);
+        oklch(0.1400 0.0150 220.00);
+
     --foreground:
-        oklch(0.9288 0.0126 255.5078);
+        oklch(0.9000 0.0100 160.00);
+
     --card:
-        oklch(0.2046 0 0);
+        oklch(0.2200 0.0120 220.00 / 0.60);
     --card-foreground:
-        oklch(0.9288 0.0126 255.5078);
+        oklch(0.9000 0.0100 160.00);
+
     --popover:
-        oklch(0.2603 0 0);
+        oklch(0.2500 0.0100 220.00 / 0.80);
     --popover-foreground:
-        oklch(0.7348 0 0);
+        oklch(0.7000 0.0050 160.00);
+
     --primary:
         oklch(0.4365 0.1044 156.7556);
     --primary-foreground:
         oklch(0.9213 0.0135 167.1556);
+
     --secondary:
-        oklch(0.2603 0 0);
+        oklch(0.2400 0.0100 220.00 / 0.55);
     --secondary-foreground:
-        oklch(0.9851 0 0);
+        oklch(0.9500 0 0);
+
     --muted:
-        oklch(0.2393 0 0);
+        oklch(0.2200 0.0080 220.00 / 0.50);
     --muted-foreground:
-        oklch(0.7122 0 0);
+        oklch(0.6500 0 0);
+
     --accent:
-        oklch(0.3132 0 0);
+        oklch(0.4365 0.1044 156.7556 / 0.22);
     --accent-foreground:
-        oklch(0.9851 0 0);
+        oklch(0.9500 0 0);
+
     --destructive:
         oklch(0.3123 0.0852 29.7877);
     --destructive-foreground:
         oklch(0.9368 0.0045 34.3092);
+
     --border:
-        oklch(0.2809 0 0);
+        oklch(0.4500 0.0150 220.00 / 0.30);
     --input:
-        oklch(0.2603 0 0);
+        oklch(0.2800 0.0100 220.00 / 0.55);
     --ring:
-        oklch(0.8003 0.1821 151.7110);
-    --chart-1:
-        oklch(0.8003 0.1821 151.7110);
-    --chart-2:
-        oklch(0.7137 0.1434 254.6240);
-    --chart-3:
-        oklch(0.7090 0.1592 293.5412);
-    --chart-4:
-        oklch(0.8369 0.1644 84.4286);
-    --chart-5:
-        oklch(0.7845 0.1325 181.9120);
+        oklch(0.8003 0.1821 151.7110 / 0.60);
+
+    --chart-1: oklch(0.8003 0.1821 151.7110);
+    --chart-2: oklch(0.7137 0.1434 254.6240);
+    --chart-3: oklch(0.7090 0.1592 293.5412);
+    --chart-4: oklch(0.8369 0.1644 84.4286);
+    --chart-5: oklch(0.7845 0.1325 181.9120);
+
     --sidebar:
-        oklch(0.1822 0 0);
+        oklch(0.1600 0.0120 220.00 / 0.65);
     --sidebar-foreground:
-        oklch(0.6301 0 0);
+        oklch(0.5800 0.0050 160.00);
     --sidebar-primary:
         oklch(0.4365 0.1044 156.7556);
     --sidebar-primary-foreground:
         oklch(0.9213 0.0135 167.1556);
     --sidebar-accent:
-        oklch(0.3132 0 0);
+        oklch(0.4365 0.1044 156.7556 / 0.18);
     --sidebar-accent-foreground:
-        oklch(0.9851 0 0);
+        oklch(0.9500 0 0);
     --sidebar-border:
-        oklch(0.2809 0 0);
+        oklch(0.4500 0.0150 220.00 / 0.25);
     --sidebar-ring:
-        oklch(0.8003 0.1821 151.7110);
-    --radius:
-        0.5rem;
-    --font-sans:
-        Outfit, sans-serif;
-    --font-serif:
-        ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-    --font-mono:
-        monospace;
-    --shadow-color:
-        #000000;
-    --shadow-opacity:
-        0.17;
-    --shadow-blur:
-        3px;
-    --shadow-spread:
-        0px;
-    --shadow-offset-x:
-        0px;
-    --shadow-offset-y:
-        1px;
-    --letter-spacing:
-        0.025em;
-    --spacing:
-        0.25rem;
-    --shadow-2xs:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.09);
-    --shadow-xs:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.09);
-    --shadow-sm:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
-    --shadow:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
-    --shadow-md:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 2px 4px -1px hsl(0 0% 0% / 0.17);
-    --shadow-lg:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 4px 6px -1px hsl(0 0% 0% / 0.17);
-    --shadow-xl:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 8px 10px -1px hsl(0 0% 0% / 0.17);
-    --shadow-2xl:
-        0px 1px 3px 0px hsl(0 0% 0% / 0.43);
+        oklch(0.8003 0.1821 151.7110 / 0.60);
+
+    --radius: 0.75rem;
+    --font-sans: Outfit, sans-serif;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: monospace;
+
+    /* Dark glass tokens */
+    --glass-bg-light:     oklch(0.2200 0.0100 220.00 / 0.55);
+    --glass-bg-tinted:    oklch(0.2800 0.0600 160.00 / 0.45);
+    --glass-border-light: oklch(0.6000 0.0100 220.00 / 0.25);
+    --glass-border-inner: oklch(0.7000 0.0100 220.00 / 0.15);
+    --glass-shadow:
+        0 4px 6px -1px oklch(0 0 0 / 0.30),
+        0 10px 30px -5px oklch(0 0 0 / 0.40),
+        0 0 0 1px oklch(0.4500 0.0150 220.00 / 0.30),
+        inset 0 1px 0 0 oklch(0.6000 0.0100 220.00 / 0.15);
+    --glass-shadow-lg:
+        0 8px 12px -2px oklch(0 0 0 / 0.35),
+        0 20px 50px -8px oklch(0 0 0 / 0.45),
+        0 0 0 1px oklch(0.4500 0.0150 220.00 / 0.30),
+        inset 0 1px 0 0 oklch(0.6000 0.0100 220.00 / 0.15);
+    --glass-shadow-primary:
+        0 8px 20px -4px oklch(0.4365 0.1044 156.7556 / 0.40),
+        0 0 0 1px oklch(0.4365 0.1044 156.7556 / 0.40),
+        inset 0 1px 0 0 oklch(0.6000 0.0100 160.00 / 0.20);
+
+    --shadow-2xs: 0px 1px 6px 0px hsl(0 0% 0% / 0.20);
+    --shadow-xs:  0px 2px 8px 0px hsl(0 0% 0% / 0.25);
+    --shadow-sm:  0px 2px 8px 0px hsl(0 0% 0% / 0.30), 0px 1px 2px -1px hsl(0 0% 0% / 0.25), inset 0 1px 0 0 hsl(0 0% 100% / 0.06);
+    --shadow:     0px 4px 16px 0px hsl(0 0% 0% / 0.32), 0px 2px 4px -1px hsl(0 0% 0% / 0.28), inset 0 1px 0 0 hsl(0 0% 100% / 0.05);
+    --shadow-md:  0px 6px 20px 0px hsl(0 0% 0% / 0.35), 0px 3px 6px -1px hsl(0 0% 0% / 0.30), inset 0 1px 0 0 hsl(0 0% 100% / 0.05);
+    --shadow-lg:  0px 10px 30px 0px hsl(0 0% 0% / 0.38), 0px 5px 10px -2px hsl(0 0% 0% / 0.32), inset 0 1px 0 0 hsl(0 0% 100% / 0.04);
+    --shadow-xl:  0px 16px 40px 0px hsl(0 0% 0% / 0.40), 0px 8px 16px -3px hsl(0 0% 0% / 0.35), inset 0 1px 0 0 hsl(0 0% 100% / 0.04);
+    --shadow-2xl: 0px 24px 60px 0px hsl(0 0% 0% / 0.50), inset 0 1px 0 0 hsl(0 0% 100% / 0.03);
 }
 
+/* ============================================================
+   BASE LAYER
+   ============================================================ */
 @layer base {
     * {
         @apply border-border;
@@ -284,140 +332,229 @@
 
     body {
         @apply bg-background text-foreground;
-    letter-spacing:
-        var(--tracking-normal);
+        letter-spacing: var(--tracking-normal);
+
+        /* Rich mesh background so glass has something to refract */
+        background-color: var(--background);
+        background-image:
+            radial-gradient(ellipse 80% 60% at 20% 10%,  oklch(0.8348 0.1302 160.9080 / 0.40) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 80% 80%,  oklch(0.6231 0.1880 259.8145 / 0.30) 0%, transparent 55%),
+            radial-gradient(ellipse 50% 60% at 50% 40%,  oklch(0.6056 0.2189 292.7172 / 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse 70% 40% at 10% 90%,  oklch(0.7686 0.1647 70.0804  / 0.20) 0%, transparent 55%);
+        min-height: 100vh;
+    }
+
+    .dark body {
+        background-image:
+            radial-gradient(ellipse 80% 60% at 20% 10%,  oklch(0.4365 0.1044 156.7556 / 0.25) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 80% 80%,  oklch(0.7137 0.1434 254.6240 / 0.18) 0%, transparent 55%),
+            radial-gradient(ellipse 50% 60% at 50% 40%,  oklch(0.7090 0.1592 293.5412 / 0.10) 0%, transparent 50%),
+            radial-gradient(ellipse 70% 40% at 10% 90%,  oklch(0.8369 0.1644 84.4286  / 0.12) 0%, transparent 55%);
     }
 }
 
+/* ============================================================
+   GLASS UTILITY CLASSES
+   Add these to your Blade/HTML components as needed.
+   ============================================================ */
+
+/* Standard glass card */
+.glass {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+    border: 1px solid var(--glass-border-light);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius);
+}
+
+/* Light / subtle glass */
+.glass-sm {
+    background: oklch(0.9900 0.0020 160.00 / 0.45);
+    backdrop-filter: blur(var(--glass-blur-sm)) saturate(1.4);
+    -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(1.4);
+    border: 1px solid oklch(1.0000 0 0 / 0.45);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius);
+}
+
+/* Heavy / more opaque glass */
+.glass-strong {
+    background: oklch(0.9800 0.0040 160.00 / 0.72);
+    backdrop-filter: blur(var(--glass-blur-xl)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur-xl)) saturate(1.8);
+    border: 1px solid oklch(1.0000 0 0 / 0.60);
+    box-shadow: var(--glass-shadow-lg);
+    border-radius: var(--radius);
+}
+
+/* Tinted glass (uses primary green hue) */
+.glass-primary {
+    background: var(--glass-bg-tinted);
+    backdrop-filter: blur(var(--glass-blur-lg)) saturate(1.7);
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(1.7);
+    border: 1px solid oklch(0.8348 0.1302 160.9080 / 0.35);
+    box-shadow: var(--glass-shadow-primary);
+    border-radius: var(--radius);
+}
+
+/* Sidebar glass */
+.glass-sidebar {
+    background: oklch(0.9850 0.0030 160.00 / 0.50);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    border-right: 1px solid oklch(1.0000 0 0 / 0.45);
+    box-shadow: var(--glass-shadow);
+}
+
+/* ---- Dark variants ---- */
+.dark .glass {
+    background: var(--glass-bg-light);
+    border-color: var(--glass-border-light);
+    box-shadow: var(--glass-shadow);
+}
+.dark .glass-sm {
+    background: oklch(0.2400 0.0100 220.00 / 0.50);
+    border-color: oklch(0.5500 0.0100 220.00 / 0.20);
+}
+.dark .glass-strong {
+    background: oklch(0.2200 0.0100 220.00 / 0.78);
+    border-color: oklch(0.5500 0.0100 220.00 / 0.28);
+    box-shadow: var(--glass-shadow-lg);
+}
+.dark .glass-primary {
+    background: var(--glass-bg-tinted);
+    border-color: oklch(0.4365 0.1044 156.7556 / 0.40);
+    box-shadow: var(--glass-shadow-primary);
+}
+.dark .glass-sidebar {
+    background: oklch(0.1800 0.0120 220.00 / 0.70);
+    border-right-color: oklch(0.4500 0.0150 220.00 / 0.25);
+}
+
+/* ============================================================
+   COMPONENT OVERRIDES
+   Wires shadcn/ui components into the glass system automatically
+   ============================================================ */
+
+/* Cards */
+.card {
+    background: var(--card);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+    border: 1px solid var(--border);
+    box-shadow: var(--glass-shadow);
+}
+
+/* Inputs */
+input, textarea, select,
+[data-slot="input"], [data-slot="textarea"] {
+    background: var(--input) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-color: var(--border) !important;
+}
+
+/* Popovers / Dropdowns */
+[data-radix-popper-content-wrapper] > *,
+[role="dialog"],
+[role="listbox"],
+[data-slot="popover-content"],
+[data-slot="dropdown-content"] {
+    background: var(--popover) !important;
+    backdrop-filter: blur(var(--glass-blur-lg)) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(1.8) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--glass-shadow-lg) !important;
+}
+
+/* Sidebar */
+[data-slot="sidebar"] {
+    background: var(--sidebar) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    border-right: 1px solid var(--sidebar-border) !important;
+}
+
+/* Tooltips */
+[data-slot="tooltip-content"] {
+    background: oklch(0.9800 0.0020 160.00 / 0.85) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border) !important;
+}
+
+.dark [data-slot="tooltip-content"] {
+    background: oklch(0.2200 0.0100 220.00 / 0.90) !important;
+}
+
+/* ============================================================
+   THEME INLINE (kept from original)
+   ============================================================ */
 @theme inline {
-    --font-sans:
-        Outfit, sans-serif;
-    --font-mono:
-        monospace;
-    --font-serif:
-        ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-    --radius:
-        0.5rem;
-    --tracking-tighter:
-        calc(var(--tracking-normal) - 0.05em);
-    --tracking-tight:
-        calc(var(--tracking-normal) - 0.025em);
-    --tracking-wide:
-        calc(var(--tracking-normal) + 0.025em);
-    --tracking-wider:
-        calc(var(--tracking-normal) + 0.05em);
-    --tracking-widest:
-        calc(var(--tracking-normal) + 0.1em);
-    --tracking-normal:
-        var(--tracking-normal);
-    --shadow-2xl:
-        var(--shadow-2xl);
-    --shadow-xl:
-        var(--shadow-xl);
-    --shadow-lg:
-        var(--shadow-lg);
-    --shadow-md:
-        var(--shadow-md);
-    --shadow:
-        var(--shadow);
-    --shadow-sm:
-        var(--shadow-sm);
-    --shadow-xs:
-        var(--shadow-xs);
-    --shadow-2xs:
-        var(--shadow-2xs);
-    --spacing:
-        var(--spacing);
-    --letter-spacing:
-        var(--letter-spacing);
-    --shadow-offset-y:
-        var(--shadow-offset-y);
-    --shadow-offset-x:
-        var(--shadow-offset-x);
-    --shadow-spread:
-        var(--shadow-spread);
-    --shadow-blur:
-        var(--shadow-blur);
-    --shadow-opacity:
-        var(--shadow-opacity);
-    --color-shadow-color:
-        var(--shadow-color);
-    --color-sidebar-ring:
-        var(--sidebar-ring);
-    --color-sidebar-border:
-        var(--sidebar-border);
-    --color-sidebar-accent-foreground:
-        var(--sidebar-accent-foreground);
-    --color-sidebar-accent:
-        var(--sidebar-accent);
-    --color-sidebar-primary-foreground:
-        var(--sidebar-primary-foreground);
-    --color-sidebar-primary:
-        var(--sidebar-primary);
-    --color-sidebar-foreground:
-        var(--sidebar-foreground);
-    --color-sidebar:
-        var(--sidebar);
-    --color-chart-5:
-        var(--chart-5);
-    --color-chart-4:
-        var(--chart-4);
-    --color-chart-3:
-        var(--chart-3);
-    --color-chart-2:
-        var(--chart-2);
-    --color-chart-1:
-        var(--chart-1);
-    --color-ring:
-        var(--ring);
-    --color-input:
-        var(--input);
-    --color-border:
-        var(--border);
-    --color-destructive-foreground:
-        var(--destructive-foreground);
-    --color-destructive:
-        var(--destructive);
-    --color-accent-foreground:
-        var(--accent-foreground);
-    --color-accent:
-        var(--accent);
-    --color-muted-foreground:
-        var(--muted-foreground);
-    --color-muted:
-        var(--muted);
-    --color-secondary-foreground:
-        var(--secondary-foreground);
-    --color-secondary:
-        var(--secondary);
-    --color-primary-foreground:
-        var(--primary-foreground);
-    --color-primary:
-        var(--primary);
-    --color-popover-foreground:
-        var(--popover-foreground);
-    --color-popover:
-        var(--popover);
-    --color-card-foreground:
-        var(--card-foreground);
-    --color-card:
-        var(--card);
-    --color-foreground:
-        var(--foreground);
-    --color-background:
-        var(--background);
-    --radius-sm:
-        calc(var(--radius) * 0.6);
-    --radius-md:
-        calc(var(--radius) * 0.8);
-    --radius-lg:
-        var(--radius);
-    --radius-xl:
-        calc(var(--radius) * 1.4);
-    --radius-2xl:
-        calc(var(--radius) * 1.8);
-    --radius-3xl:
-        calc(var(--radius) * 2.2);
-    --radius-4xl:
-        calc(var(--radius) * 2.6);
+    --font-sans: Outfit, sans-serif;
+    --font-mono: monospace;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --radius: 0.75rem;
+    --tracking-tighter:  calc(var(--tracking-normal) - 0.05em);
+    --tracking-tight:    calc(var(--tracking-normal) - 0.025em);
+    --tracking-wide:     calc(var(--tracking-normal) + 0.025em);
+    --tracking-wider:    calc(var(--tracking-normal) + 0.05em);
+    --tracking-widest:   calc(var(--tracking-normal) + 0.1em);
+    --tracking-normal:   var(--tracking-normal);
+    --shadow-2xl:        var(--shadow-2xl);
+    --shadow-xl:         var(--shadow-xl);
+    --shadow-lg:         var(--shadow-lg);
+    --shadow-md:         var(--shadow-md);
+    --shadow:            var(--shadow);
+    --shadow-sm:         var(--shadow-sm);
+    --shadow-xs:         var(--shadow-xs);
+    --shadow-2xs:        var(--shadow-2xs);
+    --spacing:           var(--spacing);
+    --letter-spacing:    var(--letter-spacing);
+    --shadow-offset-y:   var(--shadow-offset-y);
+    --shadow-offset-x:   var(--shadow-offset-x);
+    --shadow-spread:     var(--shadow-spread);
+    --shadow-blur:       var(--shadow-blur);
+    --shadow-opacity:    var(--shadow-opacity);
+    --color-shadow-color:               var(--shadow-color);
+    --color-sidebar-ring:               var(--sidebar-ring);
+    --color-sidebar-border:             var(--sidebar-border);
+    --color-sidebar-accent-foreground:  var(--sidebar-accent-foreground);
+    --color-sidebar-accent:             var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary:            var(--sidebar-primary);
+    --color-sidebar-foreground:         var(--sidebar-foreground);
+    --color-sidebar:                    var(--sidebar);
+    --color-chart-5:                    var(--chart-5);
+    --color-chart-4:                    var(--chart-4);
+    --color-chart-3:                    var(--chart-3);
+    --color-chart-2:                    var(--chart-2);
+    --color-chart-1:                    var(--chart-1);
+    --color-ring:                       var(--ring);
+    --color-input:                      var(--input);
+    --color-border:                     var(--border);
+    --color-destructive-foreground:     var(--destructive-foreground);
+    --color-destructive:                var(--destructive);
+    --color-accent-foreground:          var(--accent-foreground);
+    --color-accent:                     var(--accent);
+    --color-muted-foreground:           var(--muted-foreground);
+    --color-muted:                      var(--muted);
+    --color-secondary-foreground:       var(--secondary-foreground);
+    --color-secondary:                  var(--secondary);
+    --color-primary-foreground:         var(--primary-foreground);
+    --color-primary:                    var(--primary);
+    --color-popover-foreground:         var(--popover-foreground);
+    --color-popover:                    var(--popover);
+    --color-card-foreground:            var(--card-foreground);
+    --color-card:                       var(--card);
+    --color-foreground:                 var(--foreground);
+    --color-background:                 var(--background);
+    --radius-sm:  calc(var(--radius) * 0.6);
+    --radius-md:  calc(var(--radius) * 0.8);
+    --radius-lg:  var(--radius);
+    --radius-xl:  calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
 }
