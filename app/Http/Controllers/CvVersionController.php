@@ -87,4 +87,13 @@ class CvVersionController extends Controller
         // TODO: Implement PDF export
         return back()->with('info', 'PDF export coming soon.');
     }
+
+    public function preview(CvVersion $cv)
+    {
+        $cv->load('resolvedSections');
+
+        return view('cv-templates.preview', [
+            'cvVersion' => $cv,
+        ]);
+    }
 }

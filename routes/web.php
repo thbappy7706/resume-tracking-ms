@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/cv-versions/{cv}', [CvVersionController::class, 'destroy'])->name('cv-versions.destroy');
     Route::post('/cv-versions/{cv}/duplicate', [CvVersionController::class, 'duplicate'])->name('cv-versions.duplicate');
     Route::post('/cv-versions/{cv}/export-pdf', [CvVersionController::class, 'exportPdf'])->name('cv-versions.export-pdf');
+    Route::get('/cv-versions/{cv}/preview', [CvVersionController::class, 'preview'])->name('cv-versions.preview');
     Route::post('/cv-versions/{cv}/overrides', [CvSectionOverrideController::class, 'sync'])->name('cv-versions.overrides.sync');
 
     // Templates
@@ -60,6 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
     Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
     Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('companies.update');
+    Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
 
     // Analytics
     Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');

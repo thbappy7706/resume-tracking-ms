@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CompanySize;
 use App\Http\Requests\CompanyIndexRequest;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
@@ -38,6 +39,7 @@ class CompanyController extends Controller
         return Inertia::render('companies/index', [
             'companies' => CompanyResource::collection($companies),
             'industries' => $industries,
+            'size_options' => collect(CompanySize::cases())->map(fn ($s) => ['value' => $s->value, 'label' => $s->name]),
             'filters' => $request->only(['search', 'industry', 'sort_by', 'sort_direction']),
         ]);
     }
@@ -63,5 +65,12 @@ class CompanyController extends Controller
         $company->update($data);
 
         return back()->with('success', 'Company updated.');
+    }
+
+    public function destroy(Company $company)
+    {
+        $company->delete();
+
+        return back()->with('success', 'Company deleted.');
     }
 }

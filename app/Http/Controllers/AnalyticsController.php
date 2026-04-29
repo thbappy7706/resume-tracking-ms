@@ -88,13 +88,20 @@ class AnalyticsController extends Controller
 
     protected function getAvgDaysToResponse(string $dateFrom, string $dateTo): ?float
     {
-        $avg = JobApplication::whereBetween('applied_at', [$dateFrom, $dateTo])
+        $applications = JobApplication::whereBetween('applied_at', [$dateFrom, $dateTo])
             ->whereNotNull('responded_at')
             ->whereNotNull('applied_at')
-            ->selectRaw('AVG(DATEDIFF(responded_at, applied_at)) as avg_days')
-            ->value('avg_days');
+            ->get(['applied_at', 'responded_at']);
 
-        return $avg ? round((float) $avg, 1) : null;
+        if ($applications->isEmpty()) {
+            return null;
+        }
+
+        $totalDays = $applications->sum(function ($app) {
+            return $app->applied_at->diffInDays($app->responded_at);
+        });
+
+        return round($totalDays / $applications->count(), 1);
     }
 
     protected function getTopCompaniesByIndustry(string $dateFrom, string $dateTo): array
@@ -192,10 +199,23 @@ class AnalyticsController extends Controller
 
     protected function getWeeklyActivity(string $dateFrom, string $dateTo): array
     {
+        $driver = DB::connection()->getDriverName();
+
+        if ($driver === 'pgsql') {
+            $weekExpr = "TO_CHAR(applied_at, 'IYYY-IW')";
+            $dayExpr = 'EXTRACT(DOW FROM applied_at) + 1';
+        } elseif ($driver === 'sqlite') {
+            $weekExpr = "strftime('%Y-%W', applied_at)";
+            $dayExpr = "CAST(strftime('%w', applied_at) + 1 AS INTEGER)";
+        } else {
+            $weekExpr = 'YEARWEEK(applied_at, 1)';
+            $dayExpr = 'DAYOFWEEK(applied_at)';
+        }
+
         return JobApplication::whereBetween('applied_at', [$dateFrom, $dateTo])
             ->select(
-                DB::raw('YEARWEEK(applied_at, 1) as week'),
-                DB::raw('DAYOFWEEK(applied_at) as day_of_week'),
+                DB::raw("{$weekExpr} as week"),
+                DB::raw("{$dayExpr} as day_of_week"),
                 DB::raw('count(*) as count')
             )
             ->groupBy('week', 'day_of_week')
