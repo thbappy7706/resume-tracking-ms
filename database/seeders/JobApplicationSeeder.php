@@ -42,7 +42,7 @@ class JobApplicationSeeder extends Seeder
             [
                 'company_index' => 2,
                 'role_title' => 'Full Stack Developer',
-                'source' => ApplicationSource::LinkedIn,
+                'source' => ApplicationSource::Referral,
                 'status' => ApplicationStatus::Applied,
                 'excitement_level' => 5,
                 'days_ago' => 5,
@@ -85,7 +85,7 @@ class JobApplicationSeeder extends Seeder
             [
                 'company_index' => 7,
                 'role_title' => 'Tech Lead',
-                'source' => ApplicationSource::LinkedIn,
+                'source' => ApplicationSource::Referral,
                 'status' => ApplicationStatus::Interviewing,
                 'excitement_level' => 5,
                 'days_ago' => 18,
@@ -123,7 +123,7 @@ class JobApplicationSeeder extends Seeder
             [
                 'company_index' => 2,
                 'role_title' => 'Senior Developer',
-                'source' => ApplicationSource::LinkedIn,
+                'source' => ApplicationSource::Referral,
                 'status' => ApplicationStatus::Offer,
                 'excitement_level' => 4,
                 'days_ago' => 25,
@@ -181,7 +181,7 @@ class JobApplicationSeeder extends Seeder
             [
                 'company_index' => 6,
                 'role_title' => 'UI Engineer',
-                'source' => ApplicationSource::LinkedIn,
+                'source' => ApplicationSource::Referral,
                 'status' => ApplicationStatus::Closed,
                 'excitement_level' => 3,
                 'days_ago' => 60,
@@ -223,22 +223,22 @@ class JobApplicationSeeder extends Seeder
                 'notes' => "Application for {$appData['role_title']} at {$company->name}.",
             ]);
 
-            // Create status history
-            StatusHistory::create([
-                'job_application_id' => $application->id,
-                'from_status' => null,
-                'to_status' => ApplicationStatus::Saved->value,
-                'changed_at' => $appliedAt,
-            ]);
+            // // Create status history
+            // StatusHistory::create([
+            //     'job_application_id' => $application->id,
+            //     'from_status' => null,
+            //     'to_status' => ApplicationStatus::Saved->value,
+            //     'changed_at' => $appliedAt,
+            // ]);
 
-            if ($respondedAt) {
-                StatusHistory::create([
-                    'job_application_id' => $application->id,
-                    'from_status' => ApplicationStatus::Saved->value,
-                    'to_status' => $appData['status']->value,
-                    'changed_at' => $respondedAt,
-                ]);
-            }
+            // if ($respondedAt) {
+            //     StatusHistory::create([
+            //         'job_application_id' => $application->id,
+            //         'from_status' => ApplicationStatus::Saved->value,
+            //         'to_status' => $appData['status']->value,
+            //         'changed_at' => $respondedAt,
+            //     ]);
+            // }
         }
     }
 }

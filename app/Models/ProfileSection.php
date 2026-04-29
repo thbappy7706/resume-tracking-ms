@@ -29,7 +29,7 @@ class ProfileSection extends Model
             'start_date' => 'date',
             'end_date' => 'date',
             'is_current' => 'boolean',
-            'meta' => AsEncryptedArrayObject::class,
+            'meta' => 'array',
             'sort_order' => 'integer',
             'is_visible' => 'boolean',
         ];
