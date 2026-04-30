@@ -32,7 +32,9 @@ class CvVersionController extends Controller
 
         $cvVersion = CvVersion::create($data);
 
-        return back()->with('success', 'CV version created.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('CV version created.')]);
+
+        return back();
     }
 
     public function show(CvVersion $cv)
@@ -54,14 +56,18 @@ class CvVersionController extends Controller
 
         $cv->update($data);
 
-        return back()->with('success', 'CV version updated.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('CV version updated.')]);
+
+        return back();
     }
 
     public function destroy(CvVersion $cv)
     {
         $cv->delete();
 
-        return back()->with('success', 'CV version deleted.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('CV version deleted.')]);
+
+        return back();
     }
 
     public function duplicate(CvVersion $cv, CvVersionDuplicateRequest $request)
@@ -79,7 +85,9 @@ class CvVersionController extends Controller
             $newOverride->save();
         });
 
-        return back()->with('success', 'CV version duplicated.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('CV version duplicated.')]);
+
+        return back();
     }
 
     public function exportPdf(CvVersion $cv, CvVersionExportPdfRequest $request)

@@ -1,17 +1,17 @@
 import { Head, Link, useForm } from '@inertiajs/react';
+import { Plus, FileText, Copy, Trash2, Eye, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import { EmptyState } from '@/components/empty-state';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { EmptyState } from '@/components/empty-state';
-import { Plus, FileText, Copy, Trash2, Eye, Loader2 } from 'lucide-react';
 import { useFlashToast } from '@/hooks/use-flash-toast';
-import { ConfirmDialog } from '@/components/confirm-dialog';
-import { index as cvVersionsIndex, store as cvVersionsStore, destroy as cvVersionsDestroy } from '@/routes/cv-versions';
+import { index as cvVersionsIndex, store as cvVersionsStore, destroy as cvVersionsDestroy, duplicate } from '@/routes/cv-versions';
 
 interface CvTemplate {
     id: string;
@@ -52,7 +52,7 @@ export default function CvVersionsIndex({ cv_versions }: CvVersionsPageProps) {
     const duplicateForm = useForm({ name: '' });
 
     const handleCreate = () => {
-        form.post(cvVersionsStore().url, {
+        cvVersionsStore().post(form.data, {
             onSuccess: () => {
                 setIsCreating(false);
                 form.reset();
@@ -61,15 +61,18 @@ export default function CvVersionsIndex({ cv_versions }: CvVersionsPageProps) {
     };
 
     const handleDuplicate = (cv: CvVersion) => {
-        duplicateForm.post(`/cv-versions/${cv.id}/duplicate`, {
+        duplicate(cv).post(duplicateForm.data, {
             onStart: () => setDuplicatingId(cv.id),
             onFinish: () => setDuplicatingId(null),
         });
     };
 
     const handleDelete = () => {
-        if (!deletingCv) return;
-        form.delete(cvVersionsDestroy(deletingCv).url, {
+        if (!deletingCv) {
+return;
+}
+
+        cvVersionsDestroy(deletingCv).delete({}, {
             onSuccess: () => setDeletingCv(null),
         });
     };

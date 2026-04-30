@@ -27,7 +27,9 @@ class CvTemplateController extends Controller
 
         $template = CvTemplate::create($data);
 
-        return back()->with('success', 'Template created.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Template created.')]);
+
+        return back();
     }
 
     public function update(CvTemplate $template, CvTemplateUpdateRequest $request)
@@ -40,6 +42,8 @@ class CvTemplateController extends Controller
 
         $template->update($data);
 
-        return back()->with('success', 'Template updated.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Template updated.')]);
+
+        return back();
     }
 }

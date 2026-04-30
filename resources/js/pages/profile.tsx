@@ -1,19 +1,19 @@
 import { Head, useForm, usePoll } from '@inertiajs/react';
+import { Plus, Pencil, Trash2, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import { EmptyState } from '@/components/empty-state';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
-import { EmptyState } from '@/components/empty-state';
-import { Plus, Pencil, Trash2, Loader2 } from 'lucide-react';
 import { useFlashToast } from '@/hooks/use-flash-toast';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 import profileRoutes, { sections, index as profileIndex } from '@/routes/profile';
 
 interface Tag {
@@ -92,14 +92,14 @@ export default function ProfilePage({ sections, tags, section_types }: ProfilePa
 
     const handleSave = (section?: ProfileSection) => {
         if (section) {
-            form.put(sections.update(section).url, {
+            sections.update(section).put(form.data, {
                 onSuccess: () => {
                     setEditingId(null);
                     form.reset();
                 },
             });
         } else {
-            form.post(sections.store().url, {
+            sections.store().post(form.data, {
                 onSuccess: () => {
                     setIsCreating(false);
                     form.reset();
@@ -109,18 +109,16 @@ export default function ProfilePage({ sections, tags, section_types }: ProfilePa
     };
 
     const handleDelete = () => {
-        if (!deletingSection) return;
-        form.delete(sections.destroy(deletingSection).url);
+        if (!deletingSection) {
+return;
+}
+
+        sections.destroy(deletingSection).delete({});
     };
 
     const handleToggleVisibility = (section: ProfileSection) => {
-        const currentData = { ...form.data };
-        form.setData('is_visible', !section.is_visible);
-        form.patch(`/profile/sections/${section.id}`, {
+        sections.update(section).patch({ is_visible: !section.is_visible }, {
             preserveScroll: true,
-            onSuccess: () => {
-                form.setData(currentData);
-            },
         });
     };
 

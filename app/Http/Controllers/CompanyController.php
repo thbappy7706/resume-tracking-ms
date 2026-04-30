@@ -44,6 +44,28 @@ class CompanyController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return Inertia::render('companies/create', [
+            'size_options' => collect(CompanySize::cases())->map(fn ($s) => ['value' => $s->value, 'label' => $s->name]),
+        ]);
+    }
+
+    public function edit(Company $company)
+    {
+        return Inertia::render('companies/edit', [
+            'company' => new CompanyResource($company),
+            'size_options' => collect(CompanySize::cases())->map(fn ($s) => ['value' => $s->value, 'label' => $s->name]),
+        ]);
+    }
+
+    public function show(Company $company)
+    {
+        return Inertia::render('companies/show', [
+            'company' => new CompanyResource($company->loadCount('jobApplications')),
+        ]);
+    }
+
     public function store(CompanyStoreRequest $request)
     {
         $data = $request->validated();
@@ -51,7 +73,9 @@ class CompanyController extends Controller
 
         Company::create($data);
 
-        return back()->with('success', 'Company created.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Company created.')]);
+
+        return back();
     }
 
     public function update(Company $company, CompanyUpdateRequest $request)
@@ -64,13 +88,17 @@ class CompanyController extends Controller
 
         $company->update($data);
 
-        return back()->with('success', 'Company updated.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Company updated.')]);
+
+        return back();
     }
 
     public function destroy(Company $company)
     {
         $company->delete();
 
-        return back()->with('success', 'Company deleted.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Company deleted.')]);
+
+        return back();
     }
 }

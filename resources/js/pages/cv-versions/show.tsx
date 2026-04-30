@@ -1,17 +1,18 @@
 import { Head, router, useForm } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
+import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmptyState } from '@/components/empty-state';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { EmptyState } from '@/components/empty-state';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
-import { Link } from '@inertiajs/react';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 import { index as cvVersionsIndex, show as cvVersionsShow } from '@/routes/cv-versions';
+import { sync as syncOverrides } from '@/routes/cv-versions/overrides';
 
 interface ProfileSection {
     id: string;
@@ -75,7 +76,7 @@ export default function CvVersionShow({ cv_version }: CvVersionShowProps) {
     };
 
     const handleSaveOverride = (section: ProfileSection) => {
-        router.post(`/cv-versions/${cv_version.id}/overrides`, {
+        syncOverrides(cv_version).post({
             overrides: [
                 {
                     profile_section_id: section.id,

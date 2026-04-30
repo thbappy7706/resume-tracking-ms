@@ -97,7 +97,9 @@ class JobApplicationController extends Controller
             'changed_at' => now(),
         ]);
 
-        return back()->with('success', 'Application added.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Application added.')]);
+
+        return back();
     }
 
     public function show(JobApplication $application)
@@ -113,14 +115,18 @@ class JobApplicationController extends Controller
     {
         $application->update($request->validated());
 
-        return back()->with('success', 'Application updated.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Application updated.')]);
+
+        return back();
     }
 
     public function destroy(JobApplication $application)
     {
         $application->delete();
 
-        return back()->with('success', 'Application deleted.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Application deleted.')]);
+
+        return back();
     }
 
     public function updateStatus(JobApplication $application, JobApplicationUpdateStatusRequest $request)
@@ -141,6 +147,8 @@ class JobApplicationController extends Controller
             'changed_at' => now(),
         ]);
 
-        return back()->with('success', 'Application status updated.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Application status updated.')]);
+
+        return back();
     }
 }

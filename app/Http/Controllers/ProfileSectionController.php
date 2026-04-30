@@ -23,7 +23,9 @@ class ProfileSectionController extends Controller
             $section->tags()->sync($request->input('tags'));
         }
 
-        return back()->with('success', 'Profile section created.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile section created.')]);
+
+        return back();
     }
 
     public function update(ProfileSection $section, ProfileSectionUpdateRequest $request)
@@ -35,14 +37,18 @@ class ProfileSectionController extends Controller
             $section->tags()->sync($request->input('tags'));
         }
 
-        return back()->with('success', 'Profile section updated.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile section updated.')]);
+
+        return back();
     }
 
     public function destroy(ProfileSection $section)
     {
         $section->delete();
 
-        return back()->with('success', 'Profile section deleted.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile section deleted.')]);
+
+        return back();
     }
 
     public function reorder(ProfileSectionReorderRequest $request)
@@ -53,6 +59,8 @@ class ProfileSectionController extends Controller
             }
         });
 
-        return back()->with('success', 'Sections reordered.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Sections reordered.')]);
+
+        return back();
     }
 }

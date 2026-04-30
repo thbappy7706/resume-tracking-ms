@@ -1,22 +1,22 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Plus, ExternalLink, Loader2, LayoutGrid, List, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import { EmptyState } from '@/components/empty-state';
+import { StarRating } from '@/components/star-rating';
+import { StatusBadge } from '@/components/status-badge';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { StatusBadge } from '@/components/status-badge';
-import { StarRating } from '@/components/star-rating';
-import { EmptyState } from '@/components/empty-state';
-import { Plus, ExternalLink, Loader2, LayoutGrid, List, Trash2 } from 'lucide-react';
 import { useFlashToast } from '@/hooks/use-flash-toast';
-import { ConfirmDialog } from '@/components/confirm-dialog';
-import applicationsRoutes, { index as applicationsIndex, store as applicationsStore, destroy as applicationsDestroy } from '@/routes/applications';
+import applicationsRoutes, { index as applicationsIndex, store as applicationsStore, destroy as applicationsDestroy, updateStatus } from '@/routes/applications';
 
 interface Company {
     id: string;
@@ -97,7 +97,7 @@ export default function ApplicationsIndex({
     });
 
     const handleCreate = () => {
-        form.post(applicationsStore().url, {
+        applicationsStore().post(form.data, {
             onSuccess: () => {
                 setIsCreating(false);
                 form.reset();
@@ -106,14 +106,17 @@ export default function ApplicationsIndex({
     };
 
     const handleDelete = () => {
-        if (!deletingApp) return;
-        form.delete(applicationsDestroy(deletingApp).url, {
+        if (!deletingApp) {
+return;
+}
+
+        applicationsDestroy(deletingApp).delete({}, {
             onSuccess: () => setDeletingApp(null),
         });
     };
 
     const handleStatusChange = (app: JobApplication, newStatus: string) => {
-        router.patch(`/applications/${app.id}/status`, { status: newStatus });
+        updateStatus(app).patch({ status: newStatus });
     };
 
     const handleFilter = () => {
@@ -149,7 +152,9 @@ export default function ApplicationsIndex({
                             <Button
                                 variant={view === 'kanban' ? 'default' : 'ghost'}
                                 size="sm"
-                                onClick={() => { setView('kanban'); handleFilter(); }}
+                                onClick={() => {
+ setView('kanban'); handleFilter(); 
+}}
                                 className="rounded-r-none"
                             >
                                 <LayoutGrid className="h-4 w-4" />
@@ -157,7 +162,9 @@ export default function ApplicationsIndex({
                             <Button
                                 variant={view === 'table' ? 'default' : 'ghost'}
                                 size="sm"
-                                onClick={() => { setView('table'); handleFilter(); }}
+                                onClick={() => {
+ setView('table'); handleFilter(); 
+}}
                                 className="rounded-l-none"
                             >
                                 <List className="h-4 w-4" />

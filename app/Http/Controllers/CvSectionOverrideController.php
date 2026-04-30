@@ -6,6 +6,7 @@ use App\Http\Requests\CvSectionOverrideSyncRequest;
 use App\Models\CvSectionOverride;
 use App\Models\CvVersion;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class CvSectionOverrideController extends Controller
 {
@@ -29,6 +30,8 @@ class CvSectionOverrideController extends Controller
             }
         });
 
-        return back()->with('success', 'CV section overrides synced.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('CV section overrides synced.')]);
+
+        return back();
     }
 }

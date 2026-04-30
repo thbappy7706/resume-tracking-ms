@@ -1,10 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
 import { Briefcase, TrendingUp, Calendar, Star, Clock, FileText } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { StatusBadge } from '@/components/status-badge';
-import { StarRating } from '@/components/star-rating';
 import { EmptyState } from '@/components/empty-state';
+import { StarRating } from '@/components/star-rating';
+import { StatusBadge } from '@/components/status-badge';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { dashboard } from '@/routes';
 
 interface Summary {

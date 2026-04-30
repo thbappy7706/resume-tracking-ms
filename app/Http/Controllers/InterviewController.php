@@ -6,6 +6,7 @@ use App\Http\Requests\InterviewStoreRequest;
 use App\Http\Requests\InterviewUpdateRequest;
 use App\Models\Interview;
 use App\Models\JobApplication;
+use Inertia\Inertia;
 
 class InterviewController extends Controller
 {
@@ -16,20 +17,26 @@ class InterviewController extends Controller
 
         Interview::create($data);
 
-        return back()->with('success', 'Interview added.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Interview added.')]);
+
+        return back();
     }
 
     public function update(JobApplication $application, Interview $interview, InterviewUpdateRequest $request)
     {
         $interview->update($request->validated());
 
-        return back()->with('success', 'Interview updated.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Interview updated.')]);
+
+        return back();
     }
 
     public function destroy(JobApplication $application, Interview $interview)
     {
         $interview->delete();
 
-        return back()->with('success', 'Interview deleted.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Interview deleted.')]);
+
+        return back();
     }
 }

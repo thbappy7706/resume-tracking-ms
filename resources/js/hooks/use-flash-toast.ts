@@ -12,15 +12,19 @@ export function useFlashToast(): void {
 
         handlerRef.current = (event: Event) => {
             const detail = (event as CustomEvent).detail;
+
             if (detail?.flash?.success) {
                 toast.success(detail.flash.success);
             }
+
             if (detail?.flash?.error) {
                 toast.error(detail.flash.error);
             }
+
             if (detail?.flash?.info) {
                 toast.info(detail.flash.info);
             }
+
             if (detail?.flash?.warning) {
                 toast.warning(detail.flash.warning);
             }
