@@ -12,7 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { EmptyState } from '@/components/empty-state';
 import { Plus, Pencil, Trash2, Loader2 } from 'lucide-react';
-import profileRoutes, { index as profileIndex } from '@/routes/profile';
+import { useFlashToast } from '@/hooks/use-flash-toast';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import profileRoutes, { sections, index as profileIndex } from '@/routes/profile';
 
 interface Tag {
     id: string;
@@ -47,8 +49,10 @@ interface ProfilePageProps {
 export default function ProfilePage({ sections, tags, section_types }: ProfilePageProps) {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [isCreating, setIsCreating] = useState(false);
+    const [deletingSection, setDeletingSection] = useState<ProfileSection | null>(null);
 
     usePoll(30000, { only: ['sections'] });
+    useFlashToast();
 
     const form = useForm({
         id: '',
@@ -88,14 +92,14 @@ export default function ProfilePage({ sections, tags, section_types }: ProfilePa
 
     const handleSave = (section?: ProfileSection) => {
         if (section) {
-            form.put(profileRoutes.sections.update(section).url, {
+            form.put(sections.update(section).url, {
                 onSuccess: () => {
                     setEditingId(null);
                     form.reset();
                 },
             });
         } else {
-            form.post(profileRoutes.sections.store().url, {
+            form.post(sections.store().url, {
                 onSuccess: () => {
                     setIsCreating(false);
                     form.reset();
@@ -104,10 +108,9 @@ export default function ProfilePage({ sections, tags, section_types }: ProfilePa
         }
     };
 
-    const handleDelete = (section: ProfileSection) => {
-        if (confirm('Are you sure you want to delete this section?')) {
-            form.delete(profileRoutes.sections.destroy(section).url);
-        }
+    const handleDelete = () => {
+        if (!deletingSection) return;
+        form.delete(sections.destroy(deletingSection).url);
     };
 
     const handleToggleVisibility = (section: ProfileSection) => {
@@ -371,7 +374,7 @@ export default function ProfilePage({ sections, tags, section_types }: ProfilePa
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="icon"
-                                                                    onClick={() => handleDelete(section)}
+                                                                    onClick={() => setDeletingSection(section)}
                                                                 >
                                                                     <Trash2 className="h-4 w-4 text-destructive" />
                                                                 </Button>
@@ -387,6 +390,15 @@ export default function ProfilePage({ sections, tags, section_types }: ProfilePa
                         );
                     })}
                 </Tabs>
+
+                <ConfirmDialog
+                    open={!!deletingSection}
+                    onOpenChange={(open) => !open && setDeletingSection(null)}
+                    title="Delete Profile Section"
+                    description={`Are you sure you want to delete this ${deletingSection?.type_label || 'section'}? This action cannot be undone.`}
+                    onConfirm={handleDelete}
+                    loading={form.processing}
+                />
             </div>
         </>
     );

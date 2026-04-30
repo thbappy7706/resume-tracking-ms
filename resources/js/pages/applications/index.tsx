@@ -13,8 +13,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { StatusBadge } from '@/components/status-badge';
 import { StarRating } from '@/components/star-rating';
 import { EmptyState } from '@/components/empty-state';
-import { Plus, ExternalLink, Loader2, LayoutGrid, List } from 'lucide-react';
-import applicationsRoutes, { index as applicationsIndex, store as applicationsStore } from '@/routes/applications';
+import { Plus, ExternalLink, Loader2, LayoutGrid, List, Trash2 } from 'lucide-react';
+import { useFlashToast } from '@/hooks/use-flash-toast';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import applicationsRoutes, { index as applicationsIndex, store as applicationsStore, destroy as applicationsDestroy } from '@/routes/applications';
 
 interface Company {
     id: string;
@@ -70,9 +72,11 @@ export default function ApplicationsIndex({
     status_options,
     source_options,
 }: ApplicationsPageProps) {
+    useFlashToast();
     const [view, setView] = useState<'kanban' | 'table'>(filters.view === 'table' ? 'table' : 'kanban');
     const [isCreating, setIsCreating] = useState(false);
     const [selectedApp, setSelectedApp] = useState<JobApplication | null>(null);
+    const [deletingApp, setDeletingApp] = useState<JobApplication | null>(null);
 
     const form = useForm({
         company_id: '',
@@ -98,6 +102,13 @@ export default function ApplicationsIndex({
                 setIsCreating(false);
                 form.reset();
             },
+        });
+    };
+
+    const handleDelete = () => {
+        if (!deletingApp) return;
+        form.delete(applicationsDestroy(deletingApp).url, {
+            onSuccess: () => setDeletingApp(null),
         });
     };
 
@@ -444,10 +455,29 @@ export default function ApplicationsIndex({
                                         )}
                                     </TabsContent>
                                 </Tabs>
+                                <div className="mt-6 pt-6 border-t">
+                                    <Button
+                                        variant="destructive"
+                                        className="w-full"
+                                        onClick={() => setDeletingApp(selectedApp)}
+                                    >
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        Delete Application
+                                    </Button>
+                                </div>
                             </>
                         )}
                     </SheetContent>
                 </Sheet>
+
+                <ConfirmDialog
+                    open={!!deletingApp}
+                    onOpenChange={(open) => !open && setDeletingApp(null)}
+                    title="Delete Application"
+                    description="Are you sure you want to delete this application? This action cannot be undone."
+                    onConfirm={handleDelete}
+                    loading={form.processing}
+                />
             </div>
         </>
     );

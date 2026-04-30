@@ -9,7 +9,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/empty-state';
 import { Plus, FileText, Copy, Trash2, Eye, Loader2 } from 'lucide-react';
-import { index as cvVersionsIndex } from '@/routes/cv-versions';
+import { useFlashToast } from '@/hooks/use-flash-toast';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import { index as cvVersionsIndex, store as cvVersionsStore, destroy as cvVersionsDestroy } from '@/routes/cv-versions';
 
 interface CvTemplate {
     id: string;
@@ -34,9 +36,11 @@ interface CvVersionsPageProps {
 }
 
 export default function CvVersionsIndex({ cv_versions }: CvVersionsPageProps) {
+    useFlashToast();
     const [isCreating, setIsCreating] = useState(false);
     const [duplicateName, setDuplicateName] = useState('');
     const [duplicatingId, setDuplicatingId] = useState<string | null>(null);
+    const [deletingCv, setDeletingCv] = useState<CvVersion | null>(null);
 
     const form = useForm({
         name: '',
@@ -48,7 +52,7 @@ export default function CvVersionsIndex({ cv_versions }: CvVersionsPageProps) {
     const duplicateForm = useForm({ name: '' });
 
     const handleCreate = () => {
-        form.post('/cv-versions', {
+        form.post(cvVersionsStore().url, {
             onSuccess: () => {
                 setIsCreating(false);
                 form.reset();
@@ -63,10 +67,11 @@ export default function CvVersionsIndex({ cv_versions }: CvVersionsPageProps) {
         });
     };
 
-    const handleDelete = (cv: CvVersion) => {
-        if (confirm('Are you sure you want to delete this CV?')) {
-            form.delete(`/cv-versions/${cv.id}`);
-        }
+    const handleDelete = () => {
+        if (!deletingCv) return;
+        form.delete(cvVersionsDestroy(deletingCv).url, {
+            onSuccess: () => setDeletingCv(null),
+        });
     };
 
     const versions = cv_versions?.data ?? [];
@@ -235,7 +240,7 @@ export default function CvVersionsIndex({ cv_versions }: CvVersionsPageProps) {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => handleDelete(cv)}
+                                        onClick={() => setDeletingCv(cv)}
                                     >
                                         <Trash2 className="h-4 w-4 text-destructive" />
                                     </Button>
@@ -244,6 +249,15 @@ export default function CvVersionsIndex({ cv_versions }: CvVersionsPageProps) {
                         ))}
                     </div>
                 )}
+
+                <ConfirmDialog
+                    open={!!deletingCv}
+                    onOpenChange={(open) => !open && setDeletingCv(null)}
+                    title="Delete CV Version"
+                    description={`Are you sure you want to delete "${deletingCv?.name}"? This action cannot be undone.`}
+                    onConfirm={handleDelete}
+                    loading={form.processing}
+                />
             </div>
         </>
     );
